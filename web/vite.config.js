@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path'
 // https://vitejs.dev/config/
 
 export default defineConfig({
@@ -12,5 +13,11 @@ export default defineConfig({
         additionalData: '@import "./src/assets/style/custom.less";',
       },
     },
-  }
+  },
+  // 设置可用@符替代根目录src
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src')
+    }
+  },
 })

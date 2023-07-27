@@ -43,19 +43,24 @@ pnpm run dev
 ### 目录结构
 ```
 .
-├── public
-│   └── vite.svg
+├── public  静态资源
+│   └── vite.svg  vite构建项目时自带的logo
 ├── src
-│   ├── App.vue
-│   ├── assets
-│   ├── components
-│   ├── main.js
-│   └── style.css
-├── index.html
-├── package.json
+│   ├── App.vue 项目根文件，包含项目整体布局和逻辑
+│   ├── assets  资源文件（样式、图片等）
+|       └── style
+|           └── custom.less 存放less变量
+│   ├── components  组件抽离
+│   ├── router   路由配置
+│   ├── store   仓库管理
+│   ├── views   页面
+│   ├── main.js   入口文件，包含了Vue实例的创建和挂载
+│   └── style.css   全局样式文件(存放了reset.css清除浏览器默认CSS样式)
+├── index.html  
+├── package.json  项目配置文件
 ├── pnpm-lock.yaml
-├── README.md
-└── vite.config.js
+├── README.md   项目文档
+└── vite.config.js  Vite的配置文件
 
 ```
 ### 运行&&部署

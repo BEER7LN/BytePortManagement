@@ -11,5 +11,8 @@ module.exports = app => {
   router.post('/study/body', controller.study.body)
   router.get('/study/serviceList', controller.study.serviceList)
 
-  router.get('/user/login', controller.user.login);
+  router.all('/test/*', controller.test.index)
+  router.get('/*', controller.test.index)
+
+
 };

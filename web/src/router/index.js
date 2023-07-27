@@ -7,6 +7,11 @@ const routes = [
     // meta: ["xx"],
     // component:xxx,
   },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/Home.vue')
+  }
 ];
 //根据路由规则创建路由
 const router = createRouter({

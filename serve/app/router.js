@@ -12,7 +12,7 @@ module.exports = app => {
   router.get('/study/serviceList', controller.study.serviceList)
 
   router.all('/test/*', controller.test.index)
-  router.get('/*', controller.test.index)
+  // router.get('/*', controller.test.index)
 
-
+  router.get('/log/findById', controller.log.findByIP)
 };

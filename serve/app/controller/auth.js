@@ -3,7 +3,11 @@
 const Controller = require('egg').Controller;
 
 class AuthController extends Controller {
-  async echo() {
+  async login() {
+    
+  }
+
+  async register() {
     
   }
 }

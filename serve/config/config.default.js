@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1690336938012_1225';
 
   // 开启的中间件
-  config.middleware = ['beforelog'];
+  config.middleware = ['beforelog', 'requestLog', 'tokenVerify'];
 
   // mysql SQL 配置
   config.mysql = {

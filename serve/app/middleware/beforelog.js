@@ -1,3 +1,5 @@
+// 控制台请求日志
+
 module.exports = (options, app) => {
     return async function printLog(ctx, next){
         const {request} = ctx;

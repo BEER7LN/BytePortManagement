@@ -11,6 +11,15 @@ class UserService extends Service {
     return result;
   }
 
+  async checkUsernameConflict(username) {
+    const { app } = this;
+
+    // 根据用户名查询数据库中的用户信息
+    const user = await app.mysql.get("users", { username });
+
+    return !!user; // 如果用户存在则返回true，表示账号名已存在；否则返回false，表示账号名可用
+  }
+
   async login(username, password) {
     const { app } = this;
 
@@ -25,15 +34,6 @@ class UserService extends Service {
 
     // 登录成功
     return user;
-  }
-
-  async checkUsernameConflict(username) {
-    const { app } = this;
-
-    // 根据用户名查询数据库中的用户信息
-    const user = await app.mysql.get("users", { username });
-
-    return !!user; // 如果用户存在则返回true，表示账号名已存在；否则返回false，表示账号名可用
   }
 }
 

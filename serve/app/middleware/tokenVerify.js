@@ -20,8 +20,7 @@ module.exports = () => {
         ctx.body = "Token is required"; // 返回错误信息
         return;
       }
-      let p = await ctx.service.crypto.decode(token);
-      console.log(p);
+      ctx.user = await ctx.service.crypto.decode(token);
       // Token 校验通过，继续执行下一个中间件或路由处理函数
       await next();
     }

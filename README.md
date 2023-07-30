@@ -51,6 +51,7 @@ pnpm run dev
 |       └── style
 |           └── custom.less 存放less变量
 │   ├── components  组件抽离
+│   ├── request   Ajax请求配置
 │   ├── router   路由配置
 │   ├── store   仓库管理
 │   ├── views   页面

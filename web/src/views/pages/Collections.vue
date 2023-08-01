@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  我的收藏
 </template>
 
 <script setup>

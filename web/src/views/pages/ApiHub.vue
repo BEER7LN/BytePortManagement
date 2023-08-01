@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  API Hub
 </template>
 
 <script setup>

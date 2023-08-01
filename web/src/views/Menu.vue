@@ -18,11 +18,11 @@
             新建团队
           </a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="apiHub">
+        <a-menu-item key="apiHub" @click="toAPI">
           <svg-icon iconClass="compass" className="menu-icon"></svg-icon>
           API Hub
         </a-menu-item>
-        <a-menu-item key="collections">
+        <a-menu-item key="collections" @click="toSpace">
           <svg-icon iconClass="collection" className="menu-icon"></svg-icon>
           我的收藏
         </a-menu-item>
@@ -73,6 +73,13 @@ import { useRouter } from 'vue-router'
 // import { reactive } from 'vue';
 
 const router = useRouter()
+
+const toAPI = () => {
+  router.push('/home/apiHub')
+}
+const toSpace = () => {
+  router.push('/home/teamSpace')
+}
 
 // const items = reactive([
 //   {
@@ -142,6 +149,7 @@ const router = useRouter()
       height: 40px;
       padding: 0 16px;
       align-items: center;
+      border-bottom: 1px solid #f4f4f4;
       .toolBar{
         display: flex;
         width: 100%;
@@ -170,6 +178,9 @@ const router = useRouter()
           margin-left: 18px;
         }
       }
+    }
+    .content-wrap{
+      padding: 32px;
     }
   }
 }

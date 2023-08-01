@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  最近访问
 </template>
 
 <script setup>

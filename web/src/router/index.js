@@ -9,7 +9,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/login',
@@ -19,7 +19,29 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/Menu.vue'),
+    children: [
+      {
+        path: 'teamSpace',
+        name: 'teamSpace',
+        component: () => import('@/views/pages/TeamSpace.vue'),
+      },
+      {
+        path: 'collections',
+        name: 'collections',
+        component: () => import('@/views/pages/Collections.vue'),
+      },
+      {
+        path: 'apiHub',
+        name: 'apiHub',
+        component: () => import('@/views/pages/ApiHub.vue'),
+      },
+      {
+        path: 'recentlyVistied',
+        name: 'recentlyVistied',
+        component: () => import('@/views/pages/RecentlyVistied'),
+      },
+    ]
   },
   {
     path: '/project',

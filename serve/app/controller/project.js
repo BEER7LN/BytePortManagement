@@ -7,49 +7,41 @@ class ProjectController extends Controller {
     const { ctx } = this;
     const { team_id, project_type, project_name, project_description } =
       ctx.request.body;
-    const project_id = await ctx.service.projects.createProject(
+
+    await ctx.service.project.createProject(
       team_id,
       project_type,
       project_name,
       project_description
     );
-    ctx.body = { project_id };
-    ctx.status = 201; // Created
+    ctx.service.response.Successful();
   }
 
   async remove() {
     const { ctx } = this;
     const { project_id } = ctx.params;
-    await ctx.service.projects.deleteProject(project_id);
-    ctx.status = 204; // No Content
+
+    await ctx.service.project.deleteProject(project_id);
+    ctx.service.response.Successful();
   }
 
   async show() {
     const { ctx } = this;
     const { project_id } = ctx.params;
-    const project = await ctx.service.projects.getProjectById(project_id);
+    const project = await ctx.service.project.getProjectById(project_id);
     if (!project) {
-      ctx.status = 404; // Not Found
-      ctx.body = {
-        code: 404,
-        message: "Project not found with the provided ID.",
-      };
+      ctx.service.response.NotFound("未找到项目");
       return;
     }
-    ctx.body = {
-      success: true,
-      project,
-    };
+    ctx.service.response.Successful(project);
   }
 
   async findByTeamId() {
     const { ctx } = this;
-    const { team_id } = ctx.query;
-    const projects = await ctx.service.projects.getProjectsByTeamId(team_id);
-    ctx.body = {
-      success: true,
-      projects,
-    };
+    const { team_id } = ctx.params;
+    console.log(team_id);
+    const projects = await ctx.service.project.getTeamProjects(team_id);
+    ctx.service.response.Successful(projects);
   }
 }
 

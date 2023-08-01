@@ -8,27 +8,24 @@ class AuthController extends Controller {
     const { username, password } = ctx.request.body;
 
     if (username == undefined || password == undefined) {
-      ctx.body = { code: 401 };
+      ctx.service.response.MissingParams();
       return;
     }
     // 调用 Service 中的 login 方法进行登录
     const user = await ctx.service.user.login(username, password);
 
     if (!user) {
-      ctx.body = { code: 401 };
+      ctx.service.response.NotLogged();
       return;
     }
 
     const token = await ctx.service.crypto.encode(user);
 
-    ctx.body = {
-      code: 200,
-      data: {
-        token: token,
-        user_id: 1,
-        expiration: new Date(),
-      },
-    };
+    ctx.service.response.Successful({
+      token: token,
+      user_id: 1,
+      expiration: new Date(),
+    });
   }
 
   async register() {
@@ -36,7 +33,7 @@ class AuthController extends Controller {
     const { username, password } = ctx.request.body;
 
     if (username == undefined || password == undefined) {
-      ctx.body = { code: 401 };
+      ctx.service.response.MissingParams();
       return;
     }
 
@@ -46,13 +43,13 @@ class AuthController extends Controller {
     );
 
     if (isUsernameConflict) {
-      ctx.body = { code: 409 };
+      ctx.service.response.ResourceConflict();
       return;
     }
 
     // 调用 Service 中的 register 方法进行注册
     await ctx.service.user.register(username, password);
-    ctx.body = { code: 200 };
+    ctx.service.response.Successful();
   }
 }
 

@@ -6,39 +6,56 @@ class MenberController extends Controller {
   async create() {
     const { ctx } = this;
     const { team_id, project_id, user_id, role } = ctx.request.body;
-    const member_id = await ctx.service.members.addMember(
-      team_id,
-      project_id,
-      user_id,
-      role
-    );
-    ctx.body = { member_id };
-    ctx.status = 201; // Created
+
+    if (
+      user_id == undefined ||
+      (team_id == undefined && project_id == undefined)
+    ) {
+      ctx.service.response.MissingParams();
+      return;
+    }
+
+    if (team_id != undefined && project_id != undefined) {
+      ctx.service.response.ResourceConflict();
+      return;
+    }
+
+    await ctx.service.member.addMember(team_id, project_id, user_id, role);
+    ctx.service.response.Successful();
   }
 
   async remove() {
     const { ctx } = this;
     const { member_id } = ctx.params;
-    await ctx.service.members.removeMember(member_id);
-    ctx.status = 204; // No Content
+    console.log(typeof member_id);
+    if (member_id == undefined) {
+      ctx.service.response.Error();
+      return;
+    }
+
+    await ctx.service.member.removeMember(member_id);
+    ctx.service.response.Successful();
   }
 
   async updateRole() {
     const { ctx } = this;
     const { member_id } = ctx.params;
     const { newRole } = ctx.request.body;
-    await ctx.service.members.updateMemberRole(member_id, newRole);
-    ctx.status = 200; // OK
+
+    if (member_id == undefined || newRole == undefined) {
+      ctx.service.response.MissingParams();
+      return;
+    }
+
+    await ctx.service.member.updateMemberRole(member_id, newRole);
+    ctx.service.response.Successful();
   }
 
   async findByProjectId() {
     const { ctx } = this;
     const { project_id } = ctx.query;
-    const members = await ctx.service.members.getMembersByProjectId(project_id);
-    ctx.body = {
-      success: true,
-      members,
-    };
+    const members = await ctx.service.member.getMembersByProjectId(project_id);
+    ctx.service.response.Successful(members);
   }
 }
 

@@ -10,18 +10,15 @@ class TeamsController extends Controller {
     const { team_name } = ctx.request.body;
 
     if (team_name == undefined || team_name == "") {
-      ctx.body = { code: 400 };
+      ctx.service.response.MissingParams();
       return;
     }
 
     const team = await ctx.service.teams.createTeam(team_name, owner);
-    ctx.body = {
-      code: 200,
-      data: {
-        message: "团队创建成功",
-        team_id: team,
-      },
-    };
+    ctx.service.response.Successful({
+      message: "团队创建成功",
+      team_id: team,
+    });
     ctx.status = 201;
   }
 
@@ -31,40 +28,27 @@ class TeamsController extends Controller {
 
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
     if (!role) {
-      ctx.status = 200;
-      ctx.body = {
-        code: 403,
-        data: { message: "权限不足" },
-      };
+      ctx.service.response.InsufficientAuthority();
       return;
     }
 
     // 检查成员
     const teamMembers = await ctx.service.member.getTeamMembers(team_id);
     if (teamMembers.length > 0) {
-      ctx.status = 200;
-      ctx.body = {
-        code: 409,
-        data: { message: "不能删除团队，因为成员不为空！" },
-      };
+      ctx.service.response.ResourceConflict("不能删除团队，因为成员不为空！");
       return;
     }
 
     // 检查团队
     const teamProjects = await ctx.service.project.getTeamProjects(team_id);
     if (teamProjects.length > 0) {
-      ctx.status = 200;
-      ctx.body = {
-        code: 409,
-        data: { message: "不能删除团队，因为项目不为空！" },
-      };
+      ctx.service.response.ResourceConflict("不能删除团队，因为项目不为空！");
       return;
     }
 
     // 删除
     await ctx.service.teams.removeTeam(team_id);
-    ctx.status = 200;
-    ctx.body = { code: 200 };
+    ctx.service.response.Successful();
   }
 
   async update() {
@@ -74,17 +58,12 @@ class TeamsController extends Controller {
 
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
     if (!role) {
-      ctx.status = 200;
-      ctx.body = {
-        code: 403,
-        data: { message: "权限不足" },
-      };
+      ctx.service.response.InsufficientAuthority();
       return;
     }
 
     await ctx.service.teams.updateTeamName(team_id, team_name);
-    ctx.status = 200; // OK
-    ctx.body = { code: 200 };
+    ctx.service.response.Successful();
   }
 
   async transferOwnership() {
@@ -93,27 +72,18 @@ class TeamsController extends Controller {
     const { new_owner } = ctx.request.body;
 
     if (typeof new_owner != "number") {
-      ctx.status = 200;
-      ctx.body = {
-        code: 403,
-        data: { message: "权限不足" },
-      };
+      ctx.service.response.ResourceConflict();
       return;
     }
 
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
     if (!role) {
-      ctx.status = 200;
-      ctx.body = {
-        code: 403,
-        data: { message: "权限不足" },
-      };
+      ctx.service.response.InsufficientAuthority();
       return;
     }
 
     await ctx.service.teams.transferOwnership(team_id, new_owner);
-    ctx.status = 200; // OK
-    ctx.body = { code: 200 };
+    ctx.service.response.Successful();
   }
 
   async findTeamById() {
@@ -123,13 +93,7 @@ class TeamsController extends Controller {
     const team = await ctx.service.teams.findById(team_id);
 
     if (!team) {
-      ctx.status = 200;
-      ctx.body = {
-        code: 404,
-        data: {
-          message: "团队未找到",
-        },
-      };
+      ctx.service.response.NotFound();
       return;
     }
 
@@ -139,11 +103,7 @@ class TeamsController extends Controller {
       members: await ctx.service.member.getTeamMembers(team_id),
     };
 
-    ctx.status = 200;
-    ctx.body = {
-      code: 200,
-      data: data,
-    };
+    ctx.service.response.Successful(data);
   }
 }
 

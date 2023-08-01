@@ -3,6 +3,32 @@
 const Service = require("egg").Service;
 
 class RoleService extends Service {
+  async findPermissionByUserIdAndTeamId(user_id, team_id) {
+    const { app } = this;
+    const result = await app.model.Members.findOne({
+      where: { user_id, team_id },
+      include: [
+        {
+          model: app.model.Role,
+          as: "Role",
+        },
+      ],
+    });
+    return result ? result.Role : null;
+  }
+  async findPermissionByProjectIdAndUserId(project_Id, user_id) {
+    const { app } = this;
+    const result = await app.model.Members.findOne({
+      where: { project_id: project_Id, user_id },
+      include: [
+        {
+          model: app.model.Role,
+          as: "Role",
+        },
+      ],
+    });
+    return result ? result.Role : null;
+  }
   async createRole(data) {
     // Method to create a new role record in the database
     const result = await this.app.mysql.insert("role", data);

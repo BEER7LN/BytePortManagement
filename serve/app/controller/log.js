@@ -8,7 +8,7 @@ class LogController extends Controller {
     const ip = ctx.query.ip; // 获取查询参数中的 IP
 
     const requestLogs = await ctx.service.log.findByIP(ip);
-    ctx.body = requestLogs;
+    ctx.service.response.Successful(requestLogs);
   }
 }
 

@@ -32,6 +32,11 @@ class StudyController extends Controller {
     const { app } = this;
     console.log(app.mysql);
   }
+
+  async test() {
+    const { ctx, service } = this;
+    ctx.body = await service.role.hasAllRole(4);
+  }
 }
 
 module.exports = StudyController;

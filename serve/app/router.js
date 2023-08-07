@@ -13,7 +13,7 @@ module.exports = (app) => {
 
   // 测试操作
   router.all("/test/*", controller.test.index);
-  // router.get('/*', controller.test.index)
+  router.get("/study/test", controller.study.test);
 
   // 日志操作
   router.get("/log/findById", controller.log.findByIP);
@@ -43,4 +43,20 @@ module.exports = (app) => {
     "/menber/findByProject/:project_id",
     controller.menber.findByProjectId
   );
+
+  // 权限管理
+  router.get("/role", controller.role.findAll);
+
+  // 接口管理
+  router.get("/api/dir/:projectId", controller.api.getDirByPid);
+  router.post("/api/mkdir", controller.api.createDir);
+  router.delete("/api/deldir/:dirId", controller.api.deleteDir);
+
+  router.post("/api/create", controller.api.createApi);
+
+  // swagger
+  router.post("/swagger/text/json", controller.swagger.parseJsonText);
+  // router.post("/swagger/text/yml", controller.swagger.parseJsonText);
+  // router.post("/swagger/file/json", controller.swagger.parseJsonFile);
+  // router.post("/swagger/file/yml", controller.swagger.parseJsonFile);
 };

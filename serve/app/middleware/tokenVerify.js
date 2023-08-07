@@ -14,7 +14,10 @@ module.exports = () => {
       await next();
     } else {
       // 请求路径不是以上三者开头，判断 Token 是否为空
-      const token = ctx.header.token;
+      const token =
+        ctx.header.authorization == undefined
+          ? ctx.header.token
+          : ctx.header.authorization;
       if (!token) {
         ctx.status = 401; // 设置响应状态码为 401 Unauthorized
         ctx.body = "Token is required"; // 返回错误信息

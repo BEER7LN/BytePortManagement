@@ -45,6 +45,14 @@ class MemberService extends Service {
     });
     return members;
   }
+
+  async getMemberByTeamAndUser(team_id, user_id) {
+    const member = await this.app.mysql.get("members", {
+      team_id,
+      user_id,
+    });
+    return member;
+  }
 }
 
 module.exports = MemberService;

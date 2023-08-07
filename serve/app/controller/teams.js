@@ -5,21 +5,20 @@ const Controller = require("egg").Controller;
 class TeamsController extends Controller {
   // 团队创建
   async create() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const owner = ctx.user.id;
     const { team_name } = ctx.request.body;
 
     if (team_name == undefined || team_name == "") {
-      ctx.service.response.MissingParams();
+      service.response.MissingParams();
       return;
     }
 
-    const team = await ctx.service.teams.createTeam(team_name, owner);
-    ctx.service.response.Successful({
+    const team = await service.teams.createTeam(team_name, owner);
+    service.response.Successful({
       message: "团队创建成功",
       team_id: team,
     });
-    ctx.status = 201;
   }
 
   async remove() {

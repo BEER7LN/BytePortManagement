@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="project-list">
-        <SpaceList :projects="state.projects"/>
+        <SpaceList :projects="state.projects" editable />
       </div>
     </a-tab-pane>
     <a-tab-pane key="2" tab="成员/权限" force-render>
@@ -61,9 +61,11 @@
           :data-source="data"
           filterDropdownVisible
         >
-          <template #bodyCell="{ column }">
+          <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex === '设置'">
-              <svg-icon iconClass="setting"></svg-icon>
+              <a-button class="settingBtn" @click="() => permissionSetting(record)">
+                <svg-icon iconClass="setting"></svg-icon>
+              </a-button>
             </template>       
           </template>
         </a-table>
@@ -214,6 +216,11 @@ const data = [
 
 // 表格触发分页、排序、筛选变化时会触发的onChange事件
 
+// 权限设置(record就是表内当前行的数据，将用于权限设置模态框的最初信息展示)
+const permissionSetting = (record) => {
+  console.log(record)
+}
+
 </script>
 
 <style lang="less" scoped>
@@ -243,6 +250,19 @@ const data = [
 }
 .table{   // 表格样式
   height: 300px;
+  .settingBtn{
+    padding: 0;
+    margin-left: 5px;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+    &:hover{
+      border-radius: 4px;
+      background: #f5f5f6;
+    }
+  }
 }
 // 团队设置板块样式
 .baseInfo, .dangerArea{  // 基础信息与危险区域的标题样式

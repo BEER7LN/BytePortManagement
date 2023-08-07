@@ -1,4 +1,3 @@
-<!-- Home页副本 -->
 <template>
   <a-layout :has-sider="true" class="wrapper">
     <a-layout-sider :width="300" class="sider-wrap">
@@ -45,9 +44,21 @@
               <svg-icon :iconClass="icon.iconClass" className="tool-icon" />
             </a-button>
           </a-tooltip>
-          <a-avatar class="avatar" alt="头像" style="background: #ff936b;">
-          
-          </a-avatar>
+          <a-dropdown>
+            <a-avatar class="avatar" alt="头像" style="background: #ff936b;"></a-avatar>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item @click="accountSetting">
+                  <svg-icon iconClass="setting"/>
+                  <span class="pl12">账号设置</span>
+                </a-menu-item>
+                <a-menu-item @click="signOut">
+                  <svg-icon iconClass="sign-out"/>
+                  <span class="pl12">退出登录</span>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
         </div>
       </a-layout-header>
       <a-layout-content class="content-wrap" style="background: #fff;">
@@ -77,7 +88,7 @@ const toSpace = () => {
 }
 // 新建团队
 const addTeam = () => {
-  router.push('/home/teamSpace')
+  console.log('新建团队')
 }
 // ApiHub
 const toAPI = () => {
@@ -90,6 +101,14 @@ const toCollections = () => {
 // 最近访问
 const toRecentlyVisited = () => {
   router.push('/home/recentlyVisited')
+}
+// 账号设置
+const accountSetting = () => {
+  console.log('账号设置')
+}
+// 退出登录
+const signOut = () => {
+  console.log('退出登录')
 }
 </script>
 
@@ -159,5 +178,8 @@ const toRecentlyVisited = () => {
       padding: 32px;
     }
   }
+}
+.pl12{  // 控制头像处dropdown组件下文字与icon的间距
+  padding-left: 12px;
 }
 </style>

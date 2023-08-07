@@ -14,6 +14,7 @@ declare module 'vue' {
     AddParams: typeof import('./src/components/AddParams.vue')['default']
     AddResponse: typeof import('./src/components/AddResponse.vue')['default']
     ADirectoryTree: typeof import('ant-design-vue/es')['DirectoryTree']
+    ADropdown: typeof import('ant-design-vue/es')['Dropdown']
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AInput: typeof import('ant-design-vue/es')['Input']

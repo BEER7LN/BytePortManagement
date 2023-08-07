@@ -41,7 +41,7 @@
             arrowPointAtCenter
           >
             <a-button class="toolBtn">
-              <svg-icon :iconClass="icon.iconClass" className="tool-icon" />
+              <svg-icon :iconClass="icon.iconClass" :className="icon.iconClass" @click="toolIconClick(icon.title)" />
             </a-button>
           </a-tooltip>
           <a-dropdown>
@@ -72,6 +72,9 @@
 import svgIcon from '@/components/SvgIcon.vue'
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router'
+import {useUserStore} from '../store/user'
+import {homeAPI} from '../api/user'
+
 
 // 顶部右侧工具栏图标
 const toolIcons = reactive([
@@ -82,6 +85,7 @@ const toolIcons = reactive([
 ])
 
 const router = useRouter()
+const userStore=useUserStore()
 // 个人空间
 const toSpace = () => {
   router.push('/home/teamSpace')
@@ -92,7 +96,8 @@ const addTeam = () => {
 }
 // ApiHub
 const toAPI = () => {
-  router.push('/home/apiHub')
+  alert('此功能正在加紧开发中')
+  // router.push('/home/apiHub')
 }
 // 我的收藏
 const toCollections = () => {
@@ -102,13 +107,26 @@ const toCollections = () => {
 const toRecentlyVisited = () => {
   router.push('/home/recentlyVisited')
 }
+// 页面顶部右侧功能按钮的点击事件
+const toolIconClick = (btnFunc) => {
+  alert('此功能正在加紧开发中')
+  // console.log(btnFunc);
+  // if (btnFunc === '刷新') {
+  //   location.reload()   // 页面刷新
+  // }
+}
 // 账号设置
-const accountSetting = () => {
+const accountSetting = async() => {
   console.log('账号设置')
+  // 请求测试
+  await homeAPI().then(res => {
+    console.log(res)
+  })
 }
 // 退出登录
 const signOut = () => {
-  console.log('退出登录')
+  userStore.clearUserInfo()
+  router.push('/login')
 }
 </script>
 
@@ -161,10 +179,6 @@ const signOut = () => {
           &:hover{
             border-radius: 4px;
             background: #f5f5f6;
-          }
-          .tool-icon{
-            padding-top: 2px;
-            font-size: 18px;
           }
         }
         .avatar{

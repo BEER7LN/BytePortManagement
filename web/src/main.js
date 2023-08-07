@@ -1,6 +1,5 @@
 import { createApp } from "vue";
 import "./style.css";
-// import './assets/style/custom.less'
 import "@/assets/icons/iconfont.js";
 import VMdEditor from "@kangc/v-md-editor";
 import "@kangc/v-md-editor/lib/style/base-editor.css";
@@ -9,10 +8,12 @@ import "@kangc/v-md-editor/lib/theme/style/github.css";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from "./App.vue";
 import router from "./router";
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate)
 VMdEditor.use(githubTheme);
 const app = createApp(App);
 app.use(Antd);

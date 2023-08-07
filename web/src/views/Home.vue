@@ -1,3 +1,4 @@
+<!-- Home页副本 -->
 <template>
   <a-layout :has-sider="true" class="wrapper">
     <a-layout-sider :width="300" class="sider-wrap">
@@ -10,23 +11,23 @@
             <svg-icon iconClass="team" className="menu-icon"></svg-icon>
             我的团队
           </template>
-          <a-menu-item key="teamSpace">
+          <a-menu-item key="teamSpace" @click="toSpace">
             个人空间
           </a-menu-item>
-          <a-menu-item key="newTeam">
+          <a-menu-item key="newTeam" @click="addTeam">
             <svg-icon iconClass="add" className="menu-icon"></svg-icon>
             新建团队
           </a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="apiHub">
+        <a-menu-item key="apiHub" @click="toAPI">
           <svg-icon iconClass="compass" className="menu-icon"></svg-icon>
           API Hub
         </a-menu-item>
-        <a-menu-item key="collections">
+        <a-menu-item key="collections" @click="toCollections">
           <svg-icon iconClass="collection" className="menu-icon"></svg-icon>
           我的收藏
         </a-menu-item>
-        <a-menu-item key="recentlyVisited">
+        <a-menu-item key="recentlyVisited" @click="toRecentlyVisited">
           <svg-icon iconClass="history" className="menu-icon"></svg-icon>
           最近访问
         </a-menu-item>
@@ -35,28 +36,17 @@
     <a-layout class="content-wrap">
       <a-layout-header class="header-wrap" style="background: #fff;">
         <div class="toolBar">
-          <a-tooltip title="刷新" arrowPointAtCenter>
+          <a-tooltip
+            v-for="icon in toolIcons"
+            :title="icon.title"
+            arrowPointAtCenter
+          >
             <a-button class="toolBtn">
-              <svg-icon iconClass="refresh" className="tool-icon" />
-            </a-button>
-          </a-tooltip>
-          <a-tooltip title="设置" arrowPointAtCenter>
-            <a-button class="toolBtn">
-              <svg-icon iconClass="setting" className="tool-icon" />
-            </a-button>
-          </a-tooltip>
-          <a-tooltip title="使用帮助" arrowPointAtCenter>
-            <a-button class="toolBtn">
-                <svg-icon iconClass="question" className="tool-icon" />
-            </a-button>
-          </a-tooltip>
-          <a-tooltip title="通知" arrowPointAtCenter>
-            <a-button class="toolBtn">
-              <svg-icon iconClass="bell" className="tool-icon" />
+              <svg-icon :iconClass="icon.iconClass" className="tool-icon" />
             </a-button>
           </a-tooltip>
           <a-avatar class="avatar" alt="头像" style="background: #ff936b;">
-
+          
           </a-avatar>
         </div>
       </a-layout-header>
@@ -69,45 +59,38 @@
 
 <script setup>
 import svgIcon from '@/components/SvgIcon.vue'
+import { reactive } from 'vue';
 import { useRouter } from 'vue-router'
-// import { reactive } from 'vue';
+
+// 顶部右侧工具栏图标
+const toolIcons = reactive([
+  {title: '刷新', iconClass: 'refresh'},
+  {title: '设置', iconClass: 'setting'},
+  {title: '使用帮助', iconClass: 'question'},
+  {title: '通知', iconClass: 'bell'}
+])
 
 const router = useRouter()
-
-// const items = reactive([
-//   {
-//     key: 'team',
-//     title: '我的团队',
-//     label: '我的团队',
-//     children: [
-//       {
-//         key: 'personalSpace',
-//         title: '个人空间',
-//         label: '个人空间'
-//       },
-//       {
-//         key: 'newTeam',
-//         title: '新建团队',
-//         label: '新建团队'
-//       }, 
-//     ]
-//   },
-//   {
-//     key: 'find',
-//     title: 'API Hub',
-//     label: 'API Hub'
-//   },
-//   {
-//     key: 'favorites',
-//     title: '我的收藏',
-//     label: '我的收藏'
-//   },
-//   {
-//     key: 'recentlyVisited',
-//     title: '最近访问',
-//     label: '最近访问'
-//   }
-// ])
+// 个人空间
+const toSpace = () => {
+  router.push('/home/teamSpace')
+}
+// 新建团队
+const addTeam = () => {
+  router.push('/home/teamSpace')
+}
+// ApiHub
+const toAPI = () => {
+  router.push('/home/apiHub')
+}
+// 我的收藏
+const toCollections = () => {
+  router.push('/home/collections')
+}
+// 最近访问
+const toRecentlyVisited = () => {
+  router.push('/home/recentlyVisited')
+}
 </script>
 
 <style lang="less" scoped>
@@ -142,6 +125,7 @@ const router = useRouter()
       height: 40px;
       padding: 0 16px;
       align-items: center;
+      border-bottom: 1px solid #f4f4f4;
       .toolBar{
         display: flex;
         width: 100%;
@@ -171,14 +155,9 @@ const router = useRouter()
         }
       }
     }
+    .content-wrap{
+      padding: 32px;
+    }
   }
 }
 </style>
-
-<!-- <style lang="less">
-// 菜单样式调整（icon与文字竖直方向对齐）
-.ant-menu-title-content{
-  display: flex;
-  align-items: center;
-}
-</style> -->

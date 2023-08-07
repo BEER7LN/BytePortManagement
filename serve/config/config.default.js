@@ -1,22 +1,22 @@
 /* eslint valid-jsdoc: "off" */
 
-'use strict';
+"use strict";
 
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
-module.exports = appInfo => {
+module.exports = (appInfo) => {
   /**
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {};
+  const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1690336938012_1225';
+  config.keys = appInfo.name + "_1690336938012_1225";
 
   // 开启的中间件
-  config.middleware = ['beforelog', 'requestLog', 'tokenVerify'];
+  config.middleware = ["beforelog", "requestLog", "tokenVerify"];
 
   // mysql SQL 配置
   config.mysql = {
@@ -39,15 +39,21 @@ module.exports = appInfo => {
   };
 
   // 是否开启反向代理
-  // config.proxy = true;
+  config.proxy = true;
 
   // 关闭安全验证
   config.security = {
     csrf: {
       enable: false,
     },
+    domainWhiteList: [],
   };
-  
+
+  config.cors = {
+    origin: "*",
+    allowMethods: "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS",
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

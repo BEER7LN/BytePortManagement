@@ -12,7 +12,6 @@
 
 <script setup>
 import svgIcon from '../components/SvgIcon.vue'
-// import toolBtn from '../components/toolBtn.vue'
 </script>
 
 <style lang="less" scoped>

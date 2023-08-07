@@ -1,11 +1,12 @@
 <template>
-  <h2 class="title">{{ title }}</h2>
+  <h2 class="title" v-if="title">{{ title }}</h2>
   <ul class="project-list">
     <li class="project" v-for="project in projects">
       <img class="project-icon" :src="project.imgUrl" alt="项目logo">
       <h3 class="project-name">{{ project.name }}</h3>
-      <svg-icon iconClass="add" className="add"></svg-icon>
-      <svg-icon iconClass="collection" className="collection"></svg-icon>
+      <span v-for="icon in editIcons" class="edit-icon">
+        <svg-icon :iconClass="icon.iconClass" className="edit-icon" style="font-size: 24px;"></svg-icon>
+      </span>
     </li>
   </ul>
 </template>
@@ -23,6 +24,11 @@ const props = defineProps({
     defalut: [],
   }
 })
+
+const editIcons = [
+  { iconClass: 'add', className: ''},
+  { iconClass: 'collection', className: ''},
+]
 </script>
 
 <style lang="less" scoped>
@@ -51,8 +57,16 @@ const props = defineProps({
       overflow: hidden;
     }
     .project-name{
+      margin: 0;
       font-size: 14px;
       color: #101828cc;
+      flex: 1;
+    }
+    .edit-icon{
+      box-sizing: border-box;
+      width: 30px;
+      height: 30px;
+      padding: 4px 8px;
     }
   }
 }

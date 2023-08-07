@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const Controller = require('egg').Controller;
+const Controller = require("egg").Controller;
 
 class TestController extends Controller {
   async index() {
-    const {ctx} = this;
+    const { ctx } = this;
     let res = JSON.parse(JSON.stringify(ctx.request));
     res.ip = ctx.request.ip;
     res.path = ctx.path;

@@ -7,7 +7,9 @@
     "declarations": true
   },
   "dependencies": {
+    "crypto-js": "^4.1.1",
     "egg": "^3",
+    "egg-cors": "^2.2.3",
     "egg-mysql": "^4.0.0",
     "egg-scripts": "^2"
   },

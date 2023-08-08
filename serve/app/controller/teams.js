@@ -9,6 +9,7 @@ class TeamsController extends Controller {
     const owner = ctx.user.id;
     const { team_name } = ctx.request.body;
 
+    //缺少团队名
     if (team_name == undefined || team_name == "") {
       service.response.MissingParams();
       return;

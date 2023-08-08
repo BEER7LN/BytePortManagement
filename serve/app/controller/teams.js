@@ -16,10 +16,25 @@ class TeamsController extends Controller {
     }
 
     const team = await service.teams.createTeam(team_name, owner);
+
+    // team_id, project_id, user_id, role
+    await service.member.addMember(team, null, ctx.user.id, 4);
+
     service.response.Successful({
       message: "团队创建成功",
       team_id: team,
     });
+  }
+
+  async getTeamsByUserId() {
+    const { ctx, service } = this;
+
+    const teams = await service.member.getMembersByuserId(ctx.user.id);
+    for (let team of teams) {
+      team.team = await service.teams.findById(team.team_id);
+    }
+
+    service.response.Successful(teams);
   }
 
   async remove() {

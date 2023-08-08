@@ -28,6 +28,7 @@ module.exports = (app) => {
   router.put("/teams/:team_id", controller.teams.update);
   router.put("/teams/:team_id/transfer", controller.teams.transferOwnership);
   router.get("/teams/:team_id", controller.teams.findTeamById);
+  router.get("/teams", controller.teams.getTeamsByUserId);
 
   // 项目管理
   router.post("/project/create", controller.project.create);

@@ -46,6 +46,15 @@ class MemberService extends Service {
     return members;
   }
 
+  async getMembersByuserId(user_id) {
+    const { app } = this;
+    const members = await app.mysql.select("members", {
+      where: { user_id },
+      columns: ["member_id", "team_id", "user_id", "role"],
+    });
+    return members;
+  }
+
   async getMemberByTeamAndUser(team_id, user_id) {
     const member = await this.app.mysql.get("members", {
       team_id,

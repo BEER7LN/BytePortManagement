@@ -47,6 +47,7 @@ module.exports = (app) => {
 
   // 权限管理
   router.get("/role", controller.role.findAll);
+  router.get("/role/:role_id", controller.role.getRoleById);
 
   // 接口管理
   router.get("/api/dir/:projectId", controller.api.getDirByPid);

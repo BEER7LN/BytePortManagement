@@ -32,6 +32,7 @@ class TeamsController extends Controller {
     const teams = await service.member.getMembersByuserId(ctx.user.id);
     for (let team of teams) {
       team.team = await service.teams.findById(team.team_id);
+      team.role = await service.role.getRoleById(team.role);
     }
 
     service.response.Successful(teams);
@@ -82,23 +83,29 @@ class TeamsController extends Controller {
   }
 
   async transferOwnership() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { team_id } = ctx.params;
     const { new_owner } = ctx.request.body;
 
     if (typeof new_owner != "number") {
-      ctx.service.response.ResourceConflict();
+      service.response.ResourceConflict();
       return;
     }
 
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
     if (!role) {
-      ctx.service.response.InsufficientAuthority();
+      service.response.InsufficientAuthority();
       return;
     }
 
-    await ctx.service.teams.transferOwnership(team_id, new_owner);
-    ctx.service.response.Successful();
+    await service.teams.transferOwnership(team_id, new_owner);
+    const member = await service.member.getMemberByTeamAndUser(
+      team_id,
+      new_owner
+    );
+    service.member.updateMemberRole(member.member_id, 4);
+
+    service.response.Successful();
   }
 
   async findTeamById() {

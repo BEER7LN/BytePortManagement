@@ -39,28 +39,23 @@ class TeamsController extends Controller {
   }
 
   async remove() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { team_id } = ctx.params;
-
+    console.log(team_id, ctx.user.id);
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
+    console.log(role);
     if (!role) {
       ctx.service.response.InsufficientAuthority();
       return;
     }
 
-    // 检查成员
-    const teamMembers = await ctx.service.member.getTeamMembers(team_id);
-    if (teamMembers.length > 0) {
-      ctx.service.response.ResourceConflict("不能删除团队，因为成员不为空！");
-      return;
+    const projects = await service.project.getTeamProjects(team_id);
+    for (let pro in projects) {
+      service.member.deleteByProjectId(pro.project_id);
+      service.project.deleteProject(pro.project_id);
     }
 
-    // 检查团队
-    const teamProjects = await ctx.service.project.getTeamProjects(team_id);
-    if (teamProjects.length > 0) {
-      ctx.service.response.ResourceConflict("不能删除团队，因为项目不为空！");
-      return;
-    }
+    service.member.deleteByTeamId(team_id);
 
     // 删除
     await ctx.service.teams.removeTeam(team_id);

@@ -3,6 +3,28 @@
 const Service = require("egg").Service;
 
 class MemberService extends Service {
+  async deleteByProjectId(projectId) {
+    try {
+      const result = await this.app.mysql.delete("members", {
+        project_id: projectId,
+      });
+
+      return result.affectedRows;
+    } catch (error) {
+      throw new Error("An error occurred while deleting data.");
+    }
+  }
+  async deleteByTeamId(teamId) {
+    try {
+      const result = await this.app.mysql.delete("members", {
+        team_id: teamId,
+      });
+
+      return result.affectedRows;
+    } catch (error) {
+      throw new Error("An error occurred while deleting data.");
+    }
+  }
   async getTeamMembers(team_id) {
     const { app } = this;
     const teamMembers = await app.mysql.select("members", {

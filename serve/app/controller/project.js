@@ -56,6 +56,8 @@ class ProjectController extends Controller {
       return;
     }
 
+    await service.member.deleteByProjectId(project_id);
+
     await service.project.deleteProject(project_id);
     ctx.service.response.Successful();
   }

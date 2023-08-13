@@ -23,12 +23,13 @@ class ProjectController extends Controller {
       return;
     }
 
-    await ctx.service.project.createProject(
+    const porid = await service.project.createProject(
       team_id,
       project_type,
       project_name,
       project_description
     );
+    await service.member.addMember(null, porid, ctx.user.id, 4);
     ctx.service.response.Successful();
   }
 
@@ -70,8 +71,8 @@ class ProjectController extends Controller {
       ctx.service.response.NotFound("未找到项目");
       return;
     }
-    const member = service.member.getMemberByTeamAndUser(
-      project.team_id,
+    const member = await service.member.getMemberByProjectAndUser(
+      project_id,
       ctx.user.id
     );
     if (member == null) {
@@ -84,11 +85,13 @@ class ProjectController extends Controller {
       return;
     }
 
+    project.role = member;
+
     ctx.service.response.Successful(project);
   }
 
   async findByTeamId() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { team_id } = ctx.params;
 
     const member = service.member.getMemberByTeamAndUser(team_id, ctx.user.id);

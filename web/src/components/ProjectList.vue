@@ -42,7 +42,6 @@ import svgIcon from '@/components/SvgIcon.vue'
 import { reactive } from 'vue';
 import { DeleteProject } from '@/api/project'
 import { useRouter } from 'vue-router';
-import { SearchMembers } from '../api/member'
 
 const router = useRouter()
 

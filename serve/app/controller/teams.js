@@ -9,41 +9,53 @@ class TeamsController extends Controller {
     const owner = ctx.user.id;
     const { team_name } = ctx.request.body;
 
+    //缺少团队名
     if (team_name == undefined || team_name == "") {
       service.response.MissingParams();
       return;
     }
 
     const team = await service.teams.createTeam(team_name, owner);
+
+    // team_id, project_id, user_id, role
+    await service.member.addMember(team, null, ctx.user.id, 4);
+
     service.response.Successful({
       message: "团队创建成功",
       team_id: team,
     });
   }
 
-  async remove() {
-    const { ctx } = this;
-    const { team_id } = ctx.params;
+  async getTeamsByUserId() {
+    const { ctx, service } = this;
 
+    const teams = await service.member.getMembersByuserId(ctx.user.id);
+    for (let team of teams) {
+      team.team = await service.teams.findById(team.team_id);
+      team.role = await service.role.getRoleById(team.role);
+    }
+
+    service.response.Successful(teams);
+  }
+
+  async remove() {
+    const { ctx, service } = this;
+    const { team_id } = ctx.params;
+    console.log(team_id, ctx.user.id);
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
+    console.log(role);
     if (!role) {
       ctx.service.response.InsufficientAuthority();
       return;
     }
 
-    // 检查成员
-    const teamMembers = await ctx.service.member.getTeamMembers(team_id);
-    if (teamMembers.length > 0) {
-      ctx.service.response.ResourceConflict("不能删除团队，因为成员不为空！");
-      return;
+    const projects = await service.project.getTeamProjects(team_id);
+    for (let pro in projects) {
+      service.member.deleteByProjectId(pro.project_id);
+      service.project.deleteProject(pro.project_id);
     }
 
-    // 检查团队
-    const teamProjects = await ctx.service.project.getTeamProjects(team_id);
-    if (teamProjects.length > 0) {
-      ctx.service.response.ResourceConflict("不能删除团队，因为项目不为空！");
-      return;
-    }
+    service.member.deleteByTeamId(team_id);
 
     // 删除
     await ctx.service.teams.removeTeam(team_id);
@@ -66,23 +78,29 @@ class TeamsController extends Controller {
   }
 
   async transferOwnership() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { team_id } = ctx.params;
     const { new_owner } = ctx.request.body;
 
     if (typeof new_owner != "number") {
-      ctx.service.response.ResourceConflict();
+      service.response.ResourceConflict();
       return;
     }
 
     const role = await ctx.service.teams.OnlyOwner(team_id, ctx.user.id);
     if (!role) {
-      ctx.service.response.InsufficientAuthority();
+      service.response.InsufficientAuthority();
       return;
     }
 
-    await ctx.service.teams.transferOwnership(team_id, new_owner);
-    ctx.service.response.Successful();
+    await service.teams.transferOwnership(team_id, new_owner);
+    const member = await service.member.getMemberByTeamAndUser(
+      team_id,
+      new_owner
+    );
+    service.member.updateMemberRole(member.member_id, 4);
+
+    service.response.Successful();
   }
 
   async findTeamById() {

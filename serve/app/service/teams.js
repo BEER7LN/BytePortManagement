@@ -31,6 +31,7 @@ class TeamsService extends Service {
   async OnlyOwner(team_id, owner) {
     const { app } = this;
     const team = await app.mysql.get("teams", { team_id, owner });
+    // console.log(te)
     return !!team; // true 是所属者 false 不是
   }
 

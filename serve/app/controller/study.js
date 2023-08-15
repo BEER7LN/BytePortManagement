@@ -35,7 +35,8 @@ class StudyController extends Controller {
 
   async test() {
     const { ctx, service } = this;
-    ctx.body = await service.role.hasAllRole(4);
+    console.log(await service.role.hasCreateRole(1));
+    ctx.body = await service.role.hasCreateRole(1);
   }
 }
 

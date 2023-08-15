@@ -4,9 +4,6 @@ import { loginAPI } from '../api/user.js'
 import { message } from 'ant-design-vue';
 import { useRouter } from "vue-router";
 
-
-
-
 export const useUserStore= defineStore('user',()=>{
 	const router = useRouter()
 	//state

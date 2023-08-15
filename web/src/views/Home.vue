@@ -4,19 +4,41 @@
       <div class="sider-header">
         <span class="title">ApiTools</span>
       </div>
-      <a-menu class="sider-menu" mode="inline" triggerSubMenuAction="click">
+      <a-menu class="sider-menu" mode="inline" triggerSubMenuAction="click" :openKeys="['team']">
         <a-sub-menu key="team">
           <template #title>
             <svg-icon iconClass="team" className="menu-icon"></svg-icon>
             我的团队
           </template>
-          <a-menu-item key="teamSpace" @click="toSpace">
-            个人空间
+          <a-menu-item 
+            v-for="team in teamStore.teamData"
+            :key="team.team_id"
+            :class="{ 'active': activeTeam === team.team_id }"
+            @click="toSpace(team.team_id)"
+          >
+            {{ team.team == null ? "" : team.team.team_name }}
           </a-menu-item>
-          <a-menu-item key="newTeam" @click="addTeam">
+          <a-menu-item @click="addTeam">
             <svg-icon iconClass="add" className="menu-icon"></svg-icon>
             新建团队
           </a-menu-item>
+          <a-modal :open="isAddTeam" @ok="confirmAddTeam(formData.newTeamName)" @cancel="cancelAddTeam" centered keyboard okText="新建" cancelText="取消">
+            <template #title>
+              <div class="modal-title">新建团队</div>
+            </template>
+            <div class="modal-content">
+              <!-- <input type="text" v-model="team_name" placeholder="团队名称"> -->
+              <a-form ref="formRef" :model="formData">
+                <a-form-item
+                  label="团队名称"
+                  name="newTeamName"
+                  :rules="[{ required: true, message: '请输入团队名称', trigger: 'blur' }]"
+                >
+                  <a-input v-model:value="formData.newTeamName" />
+                </a-form-item>
+              </a-form>
+            </div>
+          </a-modal>
         </a-sub-menu>
         <a-menu-item key="apiHub" @click="toAPI">
           <svg-icon iconClass="compass" className="menu-icon"></svg-icon>
@@ -70,11 +92,26 @@
 
 <script setup>
 import svgIcon from '@/components/SvgIcon.vue'
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
-import {useUserStore} from '../store/user'
-import {homeAPI} from '../api/user'
+import { useUserStore } from '../store/user'
+import { homeAPI } from '../api/user'
+import { CreateTeam, SearchMyTeam } from '../api/team'
+import { useTeamStore } from '../store/team';
 
+const teamStore = useTeamStore();
+const activeTeam = ref(null)  // 用于存储当前高亮的团队ID
+
+// 查询自己当前所在团队信息并存入pinia仓库中
+onMounted(() => {
+  toRecentlyVisited()  // 页面初次加载时默认展示最近访问页
+  SearchMyTeam().then(res => {
+    teamStore.setTeamData(res.data.data); // 调用数据仓库的setTeamData方法来更新数据
+  })
+})
+const isAddTeam = ref(false)
+const formData = ref({ newTeamName: '' })
+const formRef = ref()
 
 // 顶部右侧工具栏图标
 const toolIcons = reactive([
@@ -85,19 +122,37 @@ const toolIcons = reactive([
 ])
 
 const router = useRouter()
-const userStore=useUserStore()
+const userStore = useUserStore()
 // 个人空间
-const toSpace = () => {
-  router.push('/home/teamSpace')
+const toSpace = (team_id) => {
+  activeTeam.value = team_id  // 设置当前高亮的团队ID
+  router.push(`/home/teamSpace/${team_id}`)
 }
 // 新建团队
 const addTeam = () => {
-  console.log('新建团队')
+  isAddTeam.value = true
+}
+const confirmAddTeam = async(team_name) => {
+  try {
+    await formRef.value.validate()
+    // 表单校验通过后的逻辑
+    await CreateTeam(team_name)
+    isAddTeam.value = false
+    // location.reload()
+  } catch (error) {
+    // 表单校验失败后检验当前表单是否存在校验规则，将校验失败报的问题解构出来打印
+    if (error.errorFields && error.errorFields.length > 0) {
+      const [{ errors }] = error.errorFields;
+      console.log(errors[0]);
+    }
+  }
+}
+const cancelAddTeam = () => {
+  isAddTeam.value = false
 }
 // ApiHub
 const toAPI = () => {
-  alert('此功能正在加紧开发中')
-  // router.push('/home/apiHub')
+  router.push('/home/apiHub')
 }
 // 我的收藏
 const toCollections = () => {
@@ -109,7 +164,7 @@ const toRecentlyVisited = () => {
 }
 // 页面顶部右侧功能按钮的点击事件
 const toolIconClick = (btnFunc) => {
-  alert('此功能正在加紧开发中')
+  // alert('此功能正在加紧开发中')
   // console.log(btnFunc);
   // if (btnFunc === '刷新') {
   //   location.reload()   // 页面刷新
@@ -195,5 +250,17 @@ const signOut = () => {
 }
 .pl12{  // 控制头像处dropdown组件下文字与icon的间距
   padding-left: 12px;
+}
+.active { // 菜单项高亮控制
+  background-color: #f5f5f6; /* 高亮背景色 */
+  color: #1890ff; /* 高亮文字颜色 */
+}
+.modal-title {  // 模态框标题样式
+  color: #101828cc;
+  font-size: 16px;
+  font-weight: normal;
+}
+.modal-content {  // 模态框内容样式
+  padding-top: 24px;
 }
 </style>

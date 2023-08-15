@@ -5,19 +5,20 @@ import { useRouter } from "vue-router";
 const router=useRouter()
 //接口请求基地址 接口超时时间
 const HttpInstance= axios.create({
-	baseURL:'http://47.115.207.245:7001',
+	// baseURL:'http://47.115.207.245:7001',
+	baseURL:'http://127.0.0.1:7001',
 	timeout:5000
 })
 
 //拦截器
 // 添加请求拦截器
 HttpInstance.interceptors.request.use(config=> {
-	// console.log('message:'+config.data.message)
+	// console.log('message:'+ config.data.message)
 	// console.log(config.data.code)
 	const userStore = useUserStore()
 	var token = ''
 	try{
-		token=userStore.userInfo.data.token
+		token = userStore.userInfo.data.token
 	}catch{
 		
 	}

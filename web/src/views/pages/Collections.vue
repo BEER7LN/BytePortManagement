@@ -1,9 +1,9 @@
 <template>
-  <SpaceList :title="state.title" :projects="state.projects"/>
+  <ProjectList :title="state.title" :projects="state.projects"/>
 </template>
 
 <script setup>
-import SpaceList from '@/components/SpaceList.vue'
+import ProjectList from '@/components/ProjectList.vue'
 import { reactive } from 'vue';
 
 const state = reactive({

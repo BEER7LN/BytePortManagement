@@ -35,6 +35,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import svgIcon from '@/components/SvgIcon.vue'
 import { CreateProject } from '@/api/project';
 
 const props = defineProps({

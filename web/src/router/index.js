@@ -9,7 +9,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -19,10 +19,10 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/views/Menu.vue'),
+    component: () => import('@/views/Home.vue'),
     children: [
       {
-        path: 'teamSpace',
+        path: 'teamSpace/:team_id',
         name: 'teamSpace',
         component: () => import('@/views/pages/TeamSpace.vue'),
       },
@@ -37,17 +37,40 @@ const routes = [
         component: () => import('@/views/pages/ApiHub.vue'),
       },
       {
-        path: 'recentlyVistied',
+        path: 'recentlyVisited',
         name: 'recentlyVistied',
-        component: () => import('@/views/pages/RecentlyVistied'),
+        component: () => import('@/views/pages/RecentlyVisited.vue'),
       },
     ]
   },
   {
-    path: '/project',
-    name: 'project',
-    component: () => import('@/views/Project.vue')
-  }
+    path: "/project",
+    redirect: "/project/interface",
+    name: "project",
+    component: () => import("@/views/Project.vue"),
+    children: [
+      {
+        path: "interface",
+        name: "interface",
+        component: () => import("@/components/InterfaceManager.vue"),
+      },
+      {
+        path: "testcase",
+        name: "testcase",
+        component: () => import("@/components/Testcase.vue"),
+      },
+      {
+        path: "setting",
+        name: "setting",
+        component: () => import("@/components/Setting.vue"),
+      },
+    ],
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: () => import("@/views/Test.vue"),
+  },
 ];
 //根据路由规则创建路由
 const router = createRouter({

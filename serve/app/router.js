@@ -35,6 +35,7 @@ module.exports = (app) => {
   router.delete("/project/:project_id", controller.project.remove);
   router.get("/project/:project_id", controller.project.show);
   router.get("/project/team/:team_id", controller.project.findByTeamId);
+  router.put("/project/rename", controller.project.rename);
 
   // 成员管理
   router.post("/menber/addMember", controller.menber.create);

@@ -35,7 +35,7 @@ class TeamsController extends Controller {
       team.role = await service.role.getRoleById(team.role);
     }
 
-    service.response.Successful(teams);
+    service.response.Successful(teams.filter((team) => team.team_id != null));
   }
 
   async remove() {

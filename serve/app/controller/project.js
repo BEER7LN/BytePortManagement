@@ -108,6 +108,18 @@ class ProjectController extends Controller {
     const projects = await ctx.service.project.getTeamProjects(team_id);
     ctx.service.response.Successful(projects);
   }
+
+  async rename() {
+    const { ctx, service } = this;
+    const { project_name, project_id } = ctx.request.body;
+
+    const result = await service.project.updateProjectName(
+      project_id,
+      project_name
+    );
+
+    ctx.body = result;
+  }
 }
 
 module.exports = ProjectController;

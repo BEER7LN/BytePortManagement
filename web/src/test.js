@@ -1,0 +1,1 @@
+let myVar = '移动test.js文件';

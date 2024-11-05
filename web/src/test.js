@@ -1,1 +1,1 @@
-let myVar = '移动test.js文件';
+let myVar = '修复 test.js文件中的bug';

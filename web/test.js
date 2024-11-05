@@ -1,0 +1,1 @@
+let myVar = '添加一个web目录下的test.js文件';

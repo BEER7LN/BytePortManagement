@@ -1,1 +1,1 @@
-let myVar = '添加一个web目录下的test.js文件';
+let myVar = '修改test.js文件';

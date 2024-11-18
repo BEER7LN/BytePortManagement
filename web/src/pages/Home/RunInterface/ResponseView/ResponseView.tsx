@@ -1,8 +1,8 @@
-import React from 'react'
-import { Space, Tooltip, message } from 'antd'
 import { CopyOutlined } from '@ant-design/icons'
 import Editor from '@monaco-editor/react'
+import { Space, Tooltip, message } from 'antd'
 import copy from 'copy-to-clipboard'
+import React from 'react'
 import styles from './index.module.scss'
 
 const ResponseView: React.FC = () => {
@@ -26,7 +26,7 @@ const ResponseView: React.FC = () => {
 				<span>请求响应</span>
 				<span>JSON</span>
 				<span>utf8</span>
-				<Tooltip title="复制内容" color="blue">
+				<Tooltip title="稍作修改" color="blue">
 					<CopyOutlined className={styles.copy} onClick={handleCopy} />
 				</Tooltip>
 			</Space>
